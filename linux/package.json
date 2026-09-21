@@ -1,0 +1,39 @@
+{
+  "name": "firaw-obs-transcricao-linux",
+  "version": "2.3.0",
+  "description": "Transcricao local de gravacoes do OBS para Linux",
+  "main": "main.js",
+  "author": { "name": "Firawynix", "email": "88189816+firawynix@users.noreply.github.com" },
+  "homepage": "https://github.com/firawynix/obs-transcricao",
+  "desktopName": "br.com.firawynix.obstranscricao.desktop",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "start": "electron .",
+    "build:linux": "electron-builder --linux AppImage deb --x64"
+  },
+  "devDependencies": {
+    "electron": "44.3.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "br.com.firawynix.obstranscricao",
+    "productName": "Firaw OBS Transcricao",
+    "executableName": "firaw-obs-transcricao",
+    "asar": true,
+    "directories": { "output": "dist" },
+    "files": ["main.js", "preload.js", "core.js", "index.html", "renderer.js", "styles.css"],
+    "extraResources": [
+      { "from": "vendor", "to": "vendor" },
+      { "from": "obs-transcrever-linux.lua", "to": "obs-transcrever-linux.lua" },
+      { "from": "../assets/transcricao-logo.png", "to": "transcricao-logo.png" }
+    ],
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "AudioVideo",
+      "syncDesktopName": true,
+      "icon": "../assets/transcricao-logo.png",
+      "artifactName": "Firaw-OBS-Transcricao-${version}-${arch}.${ext}"
+    }
+  }
+}

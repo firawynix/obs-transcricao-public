@@ -1,0 +1,57 @@
+name: Build Windows artifacts
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - name: Check out public source
+        uses: actions/checkout@v4
+
+      - name: Compile application and lightweight installer
+        shell: pwsh
+        run: .\instalador\compilar.ps1
+
+      - name: Record source and artifact provenance
+        shell: pwsh
+        run: |
+          $artifacts = @(
+            'Transcrever-Video.exe',
+            'instalador/Instalar-Transcricao-OBS.exe'
+          )
+          $records = foreach ($path in $artifacts) {
+            $item = Get-Item -LiteralPath $path
+            [ordered]@{
+              file = $item.Name
+              path = $path
+              sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant()
+              size = $item.Length
+            }
+          }
+          [ordered]@{
+            repository = '${{ github.server_url }}/${{ github.repository }}'
+            commit = '${{ github.sha }}'
+            run = '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            artifacts = $records
+          } | ConvertTo-Json -Depth 5 | Set-Content -Encoding utf8 provenance.json
+          $records | ForEach-Object { "$($_.sha256)  $($_.path)" } | Set-Content -Encoding ascii SHA256SUMS.txt
+
+      - name: Upload unsigned artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: firaw-obs-transcricao-windows-unsigned
+          if-no-files-found: error
+          path: |
+            Transcrever-Video.exe
+            instalador/Instalar-Transcricao-OBS.exe
+            provenance.json
+            SHA256SUMS.txt

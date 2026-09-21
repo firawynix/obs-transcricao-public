@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Firaw OBS Transcricao</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+  <header><img src="../transcricao-logo.png" onerror="this.style.display='none'" alt=""><div><h1>Firaw OBS Transcricao</h1><p>Legenda e texto local, sem enviar a gravacao para a internet.</p></div></header>
+  <main>
+    <section class="card setup"><div><h2>Componentes locais</h2><p id="components">Verificando…</p></div><button id="prepare">Preparar modelo</button><button id="installObs" class="secondary">Integrar ao OBS</button></section>
+    <section class="card form">
+      <label>Gravacao</label><div class="row"><input id="file" readonly placeholder="Escolha um video ou audio"><button id="choose">Escolher</button></div>
+      <div class="options"><label>Idioma<select id="language"><option value="pt">Portugues</option><option value="en">Ingles</option><option value="es">Espanhol</option><option value="auto">Automatico</option></select></label><label>Uso de CPU<input id="cpu" type="range" min="20" max="95" step="5" value="70"><span id="cpuValue">70%</span></label><label class="check"><input id="embed" type="checkbox" checked> Embutir legenda em MP4/MOV</label></div>
+      <div class="actions"><button id="start" disabled>Transcrever</button><button id="cancel" class="danger" disabled>Cancelar</button></div>
+      <div class="status"><strong id="status">Pronto.</strong><div class="bar"><i id="bar"></i></div></div>
+      <pre id="log"></pre><div id="results"></div>
+    </section>
+  </main>
+  <script src="renderer.js"></script>
+</body></html>

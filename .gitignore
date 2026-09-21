@@ -1,0 +1,34 @@
+# --- binarios de terceiros (o instalador baixa/traz) ---
+bin/
+modelos/
+
+# --- registros e saidas locais ---
+# os .log e .csv guardam nome de participante de reuniao: nao vao para o repo
+logs/
+*.wav
+*.srt
+
+# --- gerado por compilar.ps1 (Base64 dos scripts) ---
+instalador/Payload.cs
+
+# --- gerado por compilar.ps1 / empacotar.ps1 (ate 1,8 GB) ---
+instalador/*.exe
+Transcrever-Video.exe
+
+# --- hash de cada instalador, gerado na hora de publicar a release ---
+instalador/*.sha256
+
+# --- copia antiga de trabalho ---
+instalador - Copia/
+
+# --- dependencias e artefatos do aplicativo Linux ---
+linux/node_modules/
+linux/dist/
+
+# --- arquivos locais de editor e credenciais de assinatura ---
+.vscode/
+.idea/
+*.pfx
+*.p12
+*.pem
+*.key
