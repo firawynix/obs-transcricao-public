@@ -20,6 +20,7 @@ instalador/*.sha256
 
 # --- copia antiga de trabalho ---
 instalador - Copia/
+/release/
 
 # --- dependencias e artefatos do aplicativo Linux ---
 linux/node_modules/
