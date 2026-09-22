@@ -14,11 +14,21 @@ $icone = Join-Path $raiz "assets\transcricao-logo.ico"
 
 # A interface grafica vai junto no instalador e tambem fica pronta na raiz do
 # projeto para teste/uso local. Ela usa o mesmo tema do site.
+$helperExe = Join-Path $raiz "FirawAutoUpdate.exe"
+$argsHelper = @(
+    "/nologo", "/target:winexe", "/platform:anycpu", "/optimize+", "/out:$helperExe",
+    (Join-Path $aqui "FirawAutoUpdate.cs")
+)
+& $csc $argsHelper
+if ($LASTEXITCODE -ne 0) { throw "compilacao do auxiliar de atualizacao falhou" }
+"  atualizador: FirawAutoUpdate.exe"
+
 $appExe = Join-Path $raiz "Transcrever-Video.exe"
 $argsApp = @(
     "/nologo", "/target:winexe", "/optimize+", "/out:$appExe",
-    "/r:System.Windows.Forms.dll", "/r:System.Drawing.dll", "/win32icon:$icone",
-    (Join-Path $aqui "AppTranscrever.cs")
+    "/r:System.Windows.Forms.dll", "/r:System.Drawing.dll", "/r:System.Web.Extensions.dll", "/win32icon:$icone",
+    (Join-Path $aqui "AppTranscrever.cs"),
+    (Join-Path $aqui "AutoUpdate.cs")
 )
 & $csc $argsApp
 if ($LASTEXITCODE -ne 0) { throw "compilacao da interface falhou" }
@@ -26,6 +36,7 @@ if ($LASTEXITCODE -ne 0) { throw "compilacao da interface falhou" }
 
 $embutir = @(
     "Transcrever-Video.exe",
+    "FirawAutoUpdate.exe",
     "transcrever.ps1",
     "falantes.ps1",
     "lib-ocr.ps1",

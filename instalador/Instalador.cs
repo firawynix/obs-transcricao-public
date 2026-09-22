@@ -19,7 +19,7 @@ using System.Text.RegularExpressions;
 
 public static partial class Instalador
 {
-    const string VERSAO = "2.3";
+    const string VERSAO = "2.5.1";
 
     const string URL_WHISPER = "https://github.com/ggml-org/whisper.cpp/releases/download/v1.9.2/whisper-blas-bin-x64.zip";
     const string URL_MODELO  = "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin";
@@ -28,6 +28,12 @@ public static partial class Instalador
 
     static StreamWriter _log;
     static string _raiz;
+
+    [DllImport("kernel32.dll")]
+    static extern IntPtr GetConsoleWindow();
+
+    [DllImport("user32.dll")]
+    static extern bool ShowWindow(IntPtr janela, int comando);
 
     static void Diz(string msg)
     {
@@ -42,11 +48,14 @@ public static partial class Instalador
         _raiz = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "obs-transcricao");
         bool fecharObs = true;
         bool faixaMic = true;
+        bool silencioso = false;
 
         for (int i = 0; i < args.Length; i++)
         {
             if (args[i] == "--pasta" && i + 1 < args.Length) { _raiz = args[++i]; }
             else if (args[i] == "--nao-fechar-obs") { fecharObs = false; }
+            else if (string.Equals(args[i], "/S", StringComparison.OrdinalIgnoreCase)
+                     || args[i] == "--silencioso") { silencioso = true; fecharObs = false; }
             else if (args[i] == "--sem-faixa-mic") { faixaMic = false; }
             else if (args[i] == "--ajuda" || args[i] == "-h")
             {
@@ -55,6 +64,11 @@ public static partial class Instalador
                 Console.WriteLine("                   grava so sera identificada pela tela do Teams)");
                 return 0;
             }
+        }
+
+        if (silencioso)
+        {
+            try { ShowWindow(GetConsoleWindow(), 0); } catch { }
         }
 
         Directory.CreateDirectory(_raiz);
@@ -202,6 +216,7 @@ public static partial class Instalador
                 catch { }
             }
         }
+
         string alias = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                                     "Microsoft", "WindowsApps", exe);
         return File.Exists(alias) ? alias : null;

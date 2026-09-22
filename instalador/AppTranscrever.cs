@@ -11,9 +11,13 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
+
+[assembly: AssemblyVersion("2.5.1.0")]
+[assembly: AssemblyFileVersion("2.5.1.0")]
 
 public static class AppTranscrever
 {
@@ -30,6 +34,7 @@ public static class AppTranscrever
                             "Transcricao OBS", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return 3;
         }
+        AutoUpdate.Verificar();
         Application.Run(new JanelaTranscricao(raiz, op));
         return 0;
     }

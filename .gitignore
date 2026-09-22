@@ -14,6 +14,7 @@ instalador/Payload.cs
 # --- gerado por compilar.ps1 / empacotar.ps1 (ate 1,8 GB) ---
 instalador/*.exe
 Transcrever-Video.exe
+FirawAutoUpdate.exe
 
 # --- hash de cada instalador, gerado na hora de publicar a release ---
 instalador/*.sha256
